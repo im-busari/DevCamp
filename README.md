@@ -1,29 +1,13 @@
-# README 101
+## License
 
-## What is it?
+If your project is open source, it's important to include a license.
 
-A README is a text file that introduces and explains a project. It contains information that is commonly required to understand what the project is about.
+## Changelog
 
-## Why should I make it?
+Make a README is inspired by Keep a Changelog. A changelog is another file that is very useful for programming projects.
 
-It's an easy way to answer questions that your audience will likely have regarding how to install and use your project and also how to collaborate with you.
+## Contributing
 
-## Who should make it?
+Just having a "Contributing" section in your README is a good start. Another approach is to split off your guidelines into their own file (CONTRIBUTING.md). If you use GitHub and have this file, then anyone who creates an issue or opens a pull request will get a link to it.
 
-Anyone who is working on a programming project, especially if you want others to use it or contribute.
-
-## When should I make it?
-
-Definitely before you show a project to other people or make it public. You might want to get into the habit of making it the first file you create in a new project.
-
-## Where should I put it?
-
-In the top level directory of the project. This is where someone who is new to your project will start out. Code hosting services such as GitHub, Bitbucket, and GitLab will also look for your README and display it along with the list of files and directories in your project.
-
-## How should I make it?
-
-While READMEs can be written in any text file format, the most common one that is used nowadays is Markdown. It allows you to add some lightweight formatting. You can learn more about it here, which also has a helpful reference guide and an interactive tutorial. Some other formats that you might see are plain text, reStructuredText (common in Python projects), and Textile.
-
-You can use any text editor. There are plugins for many editors (e.g. Atom, Emacs, Sublime Text, Vim, and Visual Studio Code) that allow you to preview Markdown while you are editing it.
-
-You can also use a dedicated Markdown editor like Typora or an online one like StackEdit or Dillinger. You can even use the editable template below.
+You can also create an issue template and a pull request template. These files give your users and collaborators templates to fill in with the information that you'll need to properly respond. This helps to avoid situations like getting very vague issues. Both GitHub and GitLab will use the templates automatically.
