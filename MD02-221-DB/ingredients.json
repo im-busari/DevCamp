@@ -1,0 +1,43 @@
+[
+    {
+        "ingredient_id": 1,
+        "name": "almonds"
+    },
+    {
+        "ingredient_id": 2,
+        "name": "flour"
+    },
+    {
+        "ingredient_id": 3,
+        "name": "eggs"
+    },
+    {
+        "ingredient_id": 4,
+        "name": "walnuts"
+    },
+    {
+        "ingredient_id": 5,
+        "name": "sugar"
+    },
+    {
+        "ingredient_id": 6,
+        "name": "salt"
+    },
+    {
+        "ingredient_id": 7,
+        "name": "black pepper"
+    },
+    {
+        "ingredient_id": 8,
+        "name": "lemon juice"
+    },
+    {
+        "ingredient_id": 9,
+        "name": "mint"
+    },
+    {
+        "ingredient_id": 10,
+        "name": "white rum"
+    }
+    
+]
