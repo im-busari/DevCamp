@@ -4,6 +4,9 @@
     --bright-blue: #00b193;
     --pink: #fa8072;
     --dark-gray: #d1d1d1;
+
+    --distance: 2.5rem;
+    --border: 0.3rem;
 }
 
 body {
@@ -12,15 +15,15 @@ body {
 }
 
 .header {
-    min-height: 200px;
+    min-height: 15rem;
     background-repeat: no-repeat;
     background-size: auto;
     background-image: linear-gradient(to bottom, rgba(31, 36, 59, 0), rgba(255, 255, 255, 0.6)),
     url('images/divers.jpg');
-    padding: 30px;
+    padding: var(--distance);
     text-align: center;
     color: var(--white);
-    font-size: 20px;
+    font-size: 1.3rem;
 }
 
 .header p {
@@ -28,45 +31,46 @@ body {
 }
 
 .footer {
-    padding: 20px 0;
+    padding: var(--distance);
     background-color: var(--dark-gray);
     text-align: center;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .wrapper {
-    margin: 20px 50px;
+    margin: var(--distance);
     overflow:hidden;
 }
 
 .wrapper section {
-    min-height: 400px;
+    min-height: 100vh;
     height: auto;
  }
 
+/* NAVIGATION - SECTION LEFT */
 .section-left {
     float:left; 
-    margin-right:20px;
+    margin-right: var(--distance);
     width:300px;
-    border: 3px solid var(--bright-blue);
+    border: var(--border) solid var(--bright-blue);
     height: 100%;
 }
-.aside-h {
+.section-left .title {
     text-align: right;
-    padding-right: 30px;
+    padding-right: var(--distance);
     text-transform: uppercase;
     font-weight: 700;
 }
 .aside-nav {
-    padding: 20px;
+    padding: 2rem;
 }
 .aside-nav li {
     text-align: right;
     text-transform: uppercase;
 
     list-style-type: none;
-    padding: 15px;
-    font-size: 18px;
+    padding: 1rem;
+    font-size: 1.2rem;
 }
 .aside-nav li a {
     color: var(--black);
@@ -78,21 +82,23 @@ body {
     text-decoration: none;
 }
 
+
+/* ARTICLE - SECTION RIGHT*/
 .section-right {
     text-align: center;
     overflow:hidden;
-    padding: 0px 20px;
-    border: 2px dashed var(--pink);
+    padding: 0px var(--distance);
+    border: var(--border) dashed var(--pink);
 }
 
 .img-container {
+    margin: auto;
     text-align: center;
-    float: left;
 }
 .article-img {
-    margin: 20px 50px;
-    height: 200px;
-    width: 200px;
+    margin: 2rem 1.5rem;
+    height: 17rem;
+    width: 17rem;
     background-color: var(--dark-gray);
 }
 .article-full-img {
@@ -103,15 +109,16 @@ body {
 
 
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: 800px) {
     .section-left {
         display: none;
-      }
+    }
     .wrapper {
         margin: 0;
     }
     .section-right {
       overflow:hidden;
+      padding: 0;
       border: none;
     }
     .article-img {
