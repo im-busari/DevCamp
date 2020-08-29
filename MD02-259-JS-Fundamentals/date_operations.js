@@ -41,6 +41,7 @@ const getWorkingDays = (startDate, endDate) => {
     }
     return numOfWorkingDays;
 }
+<<<<<<< HEAD
 
 
 try {
@@ -51,6 +52,12 @@ try {
     console.error(e);
 }
 
+=======
+workingDays = getWorkingDays(startDate, endDate) - 5 // Christmas Holiday 2020's part
+console.log(`From today (${timestamp.getDate()}/${timestamp.getMonth()}/${timestamp.getFullYear()}) until 31st of December you have ${workingDays} working days.`)
+
+
+>>>>>>> effd5b50e2fa713014452468eebbf86ba5f6bd48
 //  When your birthday is on Friday between 2020 and 2050
 console.log('My Birthday will be on Friday in the following years:');
 for (let year = 2020; year <= 2050; year++) {
