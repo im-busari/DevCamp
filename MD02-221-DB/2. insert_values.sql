@@ -1,89 +1,80 @@
--- Procedures
-DELIMITER //
-CREATE PROCEDURE add_table_ticket (IN name VARCHAR(100), IN available BOOLEAN)
-BEGIN
-    INSERT INTO table_tickets (name, available) VALUES (name, available);
-END //
-DELIMITER ;
-
-DELIMITER //
-CREATE PROCEDURE deactivate_table_ticket (IN id INT UNSIGNED)
-BEGIN
-    UPDATE table_tickets SET available = false WHERE id=id;
-END //
-DELIMITER ;
-
-
+-- Creating our menu, categories and ingredients rows
 INSERT INTO categories (name)
 VALUES
-	('Drinks'),
-    ('Cocktails'),
-    ('Soups'),
-    ('Salad'),
-    ('Meals'),
-    ('Desserts');
+	('Drinks'), ('Cocktails'), ('Soups'),
+    ('Salad'), ('Meals'), ('Desserts');
     
     
 INSERT INTO ingredients (name)
 VALUES
-	('Almonds'),
-    ('Eggs'),
-    ('Flour'),
-    ('Sugar'),
-    ('Salt'),
-    ('Lime Juice'),
-    ('White Rum'),
-    ('Mint'),
-    ('Chicken'),
-    ('Potatoes');
+	('Almonds'), ('Eggs'), ('Flour'), ('Sugar'), ('Salt'), ('Lime Juice'),
+    ('White Rum'), ('Mint'), ('Chicken'), ('Potatoes');
     
 
-INSERT INTO menu_items (name, category_id, picture, description, price, available)
-VALUES
-	("Chicken Cake Soup", 3, "/path/image3", "Lovely chicken soup", '10.15', true),
-    ("Cake", 5, "path/image3", "Lovely cake", 25.15, true),
-    ("Mojito", 2, "path/image3", "Mochito for you to chill", 15.30, true),
-    ("Long Island", 2, "path/image3", "Long Island for you to die.", 30.30, true),
-    ("Miracle", 4, "path/image3", "Long Island for you to die.", 30.30, false);
+CALL add_menu_item("Chicken Cake Soup", 3, "/path/image3", "Lovely chicken soup", '10.15', true);
+CALL add_menu_item("Mojito", 2, "path/image3", "Mochito for you to chill", 15.30, true);
+CALL add_menu_item("Long Island", 2, "path/image3", "Long Island for you to die.", 30.30, true);
+CALL add_menu_item("Miracle", 4, "path/image3", "Long Island for you to die.", 30.30, false);
 
 INSERT INTO items_has_ingredients(menu_item_id, ingredient_id)
 VALUES 
-    (1, 9), (1, 10), (2, 2), (2, 4), (3, 6), (3, 7), (4, 7), (5, 2), (5, 1);
+    (1, 9), (1, 10), (2, 2), (2, 4), (3, 6), (3, 7), (4, 7);
 
--- Creating the number of tables 
+-- Creating the number of tables using stored procedures
 CALL add_table_ticket("table_A1", true);
-INSERT INTO table_tickets(name, available)
+CALL add_table_ticket("table_A2", true);
+CALL add_table_ticket("table_B1", true);
+CALL add_table_ticket("table_B2", true);
+
+
+-- PLACING ORDERS ----------------------------------------
+
+-- Placing order will be a transaction since if something fails in between we still want our table to be available
+START TRANSACTION;
+
+-- 1. Pick a table that will be the "ticket" for all orders
+SELECT @ticket_id:=id FROM table_tickets WHERE available=true 
+ORDER BY RAND() LIMIT 1;
+-- 2. Insert new orders for customers on table @ticket_id
+INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid, created_at)
 VALUES
-	("table_A2", true), ("table_B1", true), ("table_B2", true);
+	(@ticket_id, 4, 3, (SELECT price FROM menu_items WHERE id = 4), 1, '2020-08-15 15:30:36'),
+    (@ticket_id, 3, 1, (SELECT price FROM menu_items WHERE id = 3), 0, '2020-08-15 15:32:36');
+-- 3. Change the status of the table
+UPDATE table_tickets SET available = false WHERE (id = @ticket_id);  
+      
+-- 4. Commit changes    
+COMMIT;
 
 
--- Add at least 3 orders/recipes with at least one menu item with a changed price at least 2 times 
--- (an order with initial menu item price, an order with the same menu item and fist price update and 
--- other order with the same menu item second price update - no duplicated prices).
-INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid)
+CALL update_menu_item(3, 10.20);
+
+
+-- 2nd TRANSACTION
+START TRANSACTION;
+
+SELECT @ticket_id:=id from table_tickets WHERE available=true
+ORDER BY RAND() LIMIT 1;
+INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid, created_at)
 VALUES
-	(1, 4, 3, (SELECT price FROM menu_items WHERE id = 4), 1),
-    (2, 3, 1, (SELECT price FROM menu_items WHERE id = 3), 0);
- 
--- Just want to have a slight difference for later when I check items
-UPDATE orders SET created_at = '2020-05-26 20:40:36' WHERE (id = '1');  
+    (@ticket_id, 3, 1, (SELECT price FROM menu_items WHERE id = 3), 0, '2020-08-20 12:32:36');
+UPDATE table_tickets SET available = false WHERE (id = @ticket_id);  
+        
+COMMIT;
+-- END OF TRANSACTION
 
-UPDATE menu_items
-SET price = 10.20
-WHERE id=3;
+CALL update_menu_item(3, 5.20);
 
-INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid)
+-- 3rd TRANSACTION
+START TRANSACTION;
+
+SELECT @ticket_id:=id from table_tickets WHERE available=true
+ORDER BY RAND() LIMIT 1;
+INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid, created_at)
 VALUES
-    (2, 3, 1, (SELECT price FROM menu_items WHERE id = 3), 1);
-
-UPDATE menu_items SET price = 5.00 WHERE id=3;
-
-
-INSERT INTO orders (table_ticket_id, menu_item_id, quantity, price, paid)
-VALUES
-    (3, 3, 2, (SELECT price FROM menu_items WHERE id = 3), 0),
-    (1, 2, 1, (SELECT price FROM menu_items WHERE id = 2), 1);
-    
--- UPDATE orders SET total = price * quantity WHERE table_ticket_id;
-
--- Immanuella Busari
+    (@ticket_id, 3, 2, (SELECT price FROM menu_items WHERE id = 3), 0, '2020-08-20 12:32:36'),
+    (@ticket_id, 2, 5, (SELECT price FROM menu_items WHERE id = 2), 0, '2020-08-20 12:32:36');
+UPDATE table_tickets SET available = false WHERE (id = @ticket_id);  
+        
+COMMIT;
+-- END OF TRANSACTION
