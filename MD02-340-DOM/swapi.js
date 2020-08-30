@@ -8,8 +8,7 @@ const fetchSwapi = async () => {
         data.results.map((item) => {
             //console.log(item.opening_crawl, item.planets)
             result.push({ "opening_crawl" : item.opening_crawl, "planets": item.planets})
-        })
-        );
+        }));
     return result;
 };
 
@@ -18,7 +17,6 @@ const fetchPlanets = async (url) => {
     let planet_name = await res.json().then(data => {
         return data.name
     })
-
     return await planet_name;
 }
 
@@ -29,18 +27,12 @@ const updateObject = async (current_item) => {
             current_item.planets[i] = result
         })
     }
-
     return current_item
 } 
 
-
-
-
+//  Run  everything
 (async () => {
     let final_result = await fetchSwapi()
-
-    let planet_name;
-    let res;
 
     final_result.forEach(async (item) => {
         updateObject(item).then( result => { console.log(result)})

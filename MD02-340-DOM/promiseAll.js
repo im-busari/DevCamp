@@ -25,7 +25,6 @@ Promise.all(funcList)
         if (values[i] === undefined) values.splice(i, 1)
     }
     console.log(values)
-
 }).catch(error => {
     console.error(error)
 })

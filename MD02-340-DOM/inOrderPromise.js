@@ -10,8 +10,6 @@ function promiseOrder(msgOne, msgTwo) {
     })
 }
 
-
-
 const logOne = () => {
     return new Promise(function (resolve, reject) {
         setTimeout(function() {
@@ -27,6 +25,5 @@ const logTwo = () => {
       }, Math.random() * 0)
     });
 }
-
 
 promiseOrder(logOne, logTwo)

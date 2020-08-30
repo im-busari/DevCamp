@@ -4,7 +4,6 @@ function inOrder(msgOne, callback) {
     msgOne(callback);
 }
 
-
 function logOne(callback) {
     return setTimeout(() => {
         console.log("one!");
