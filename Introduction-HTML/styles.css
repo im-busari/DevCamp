@@ -1,0 +1,128 @@
+:root {
+    --white: #fff;
+    --black: #000;
+    --bright-blue: #00b193;
+    --pink: #fa8072;
+    --dark-gray: #d1d1d1;
+
+    --distance: 2.5rem;
+    --border: 0.3rem;
+}
+
+body {
+    font-family: Arial;
+    margin: 0;
+}
+
+.header {
+    min-height: 15rem;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-image: linear-gradient(to bottom, rgba(31, 36, 59, 0), rgba(255, 255, 255, 0.6)),
+    url('images/divers.jpg');
+    padding: var(--distance);
+    text-align: center;
+    color: var(--white);
+    font-size: 1.3rem;
+}
+
+.header p {
+    font-style: italic;
+}
+
+.footer {
+    padding: var(--distance);
+    background-color: var(--dark-gray);
+    text-align: center;
+    font-size: 1rem;
+}
+
+.wrapper {
+    margin: var(--distance);
+    overflow:hidden;
+}
+
+.wrapper section {
+    min-height: 100vh;
+    height: auto;
+ }
+
+/* NAVIGATION - SECTION LEFT */
+.section-left {
+    float:left; 
+    margin-right: var(--distance);
+    width:300px;
+    border: var(--border) solid var(--bright-blue);
+    height: 100%;
+}
+.section-left .title {
+    text-align: right;
+    padding-right: var(--distance);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.aside-nav {
+    padding: 2rem;
+}
+.aside-nav li {
+    text-align: right;
+    text-transform: uppercase;
+
+    list-style-type: none;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+.aside-nav li a {
+    color: var(--black);
+    font-weight: 200;
+    text-decoration: none;
+}
+.aside-nav li a:hover {
+    color: var(--bright-blue);
+    text-decoration: none;
+}
+
+
+/* ARTICLE - SECTION RIGHT*/
+.section-right {
+    text-align: center;
+    overflow:hidden;
+    padding: 0px var(--distance);
+    border: var(--border) dashed var(--pink);
+}
+
+.img-container {
+    margin: auto;
+    text-align: center;
+}
+.article-img {
+    margin: 2rem 1.5rem;
+    height: 17rem;
+    width: 17rem;
+    background-color: var(--dark-gray);
+}
+.article-full-img {
+    margin: 10px 0px;
+    height: 400px;
+    width: auto;
+}
+
+
+
+@media screen and (max-width: 800px) {
+    .section-left {
+        display: none;
+    }
+    .wrapper {
+        margin: 0;
+    }
+    .section-right {
+      overflow:hidden;
+      padding: 0;
+      border: none;
+    }
+    .article-img {
+        margin:0 auto;
+        width: 100%;
+    }
+}
