@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Conditional Statement to sort 3 numbers</title>
+    </head>
+
+    <script>
+
+        const x = 8
+        const y = 3
+        const z = 7
+
+        if (y >= x && y >= z) {
+            if (x >= z) alert(`${y}, ${x}, ${z}`);
+            else alert(`${y}, ${z}, ${x}`);
+        } 
+        else if (x >= y && x >= z) {
+            if (y >= z) alert(`${x}, ${y}, ${z}`);
+            else alert(`${x}, ${z}, ${y}`);
+        }
+        else if (z >= y && z >= x) {
+            if (y >= x) alert(`${z}, ${y}, ${x}`);
+            else alert(`${z}, ${x}, ${y}`);
+        }
+    </script>
+</html>
