@@ -5,42 +5,38 @@ let income = 0.0;
 let coffee = new events.EventEmitter();
 let working = true;
 
+let generateCoffee = (price, time) => {
+    setTimeout(() => { 
+        income += price;
+    }, time);
+}
 //  Our menu
-coffee.on('espresso', function () {
-    setTimeout(function(){ 
-        income += 1;
-    }, 500);
+coffee.on('espresso', () => {
+    generateCoffee(1, 500)
 });
-
-coffee.on('cappuccino', function () {
-    setTimeout(function(){ 
-        income += 3.5;
-    }, 1000);
+coffee.on('cappuccino', () => {
+    generateCoffee(3.5, 1000)
 });
-coffee.on('latte', function () {
-    setTimeout(function(){ 
-        income += 4.3;
-    }, 1500);
+coffee.on('latte', () => {
+    generateCoffee(4.3, 1500)
 });
-coffee.on('americano', function () {
-    setTimeout(function(){ 
-        income += 1.5;
-    }, 700);
+coffee.on('americano', () => {
+    generateCoffee(1.5, 700)
 });
 
 
 //  Timeout for break
-setTimeout(function(){
-    working = !working
+setTimeout(() => {
+    working = false
     console.log("--- On a break, back in 5 sec...");
-    setTimeout(function(){
+    setTimeout(() => {
         console.log("--- We are back!");
-        working = !working
+        working = true
     }, 5000)
 }, 12000)
 
 //  Stop the shop and show the income
-setTimeout(function() {
+setTimeout(() => {
     clearInterval(shop);
     console.log("WE are CLOSED. See you tomorrow! ;)");
     setImmediate(() => {
@@ -51,9 +47,9 @@ setTimeout(function() {
 
 console.log("We are OPEN. Welcome ^-^")
 //  The running business
-var shop = setInterval(function() {
+var shop = setInterval(() => {
 
-    if (working === true ){
+    if (working){
         
         let choice = Math.floor(Math.random() * 4) + 1 
         switch(choice) {
