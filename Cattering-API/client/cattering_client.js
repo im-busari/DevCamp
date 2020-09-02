@@ -1,4 +1,3 @@
-//  const yargs = require('yargs');
 const fs = require('fs');
 let config = require('./config.json');
 let argv = require('minimist')(process.argv.slice(2));
@@ -46,6 +45,20 @@ switch (myArgs[0]) {
       console.log('Please try to provide --cat');
     }
     break;
+  case '--getall':
+    //  Return all meows in JSON format
+    break;
+  case '--getself':
+    //  Get my meows
+    break;
+  case '--create':
+  //  This call requires cat and key from config.json file
+  //  Create new meow with --message...
+  case '--delete':
+    //  This call requires cat and key from config.json file
+    //  Should delete a meow with given --meowid...
+    break;
+
   default:
-    console.log('Sorry, that is not something I know how to do.');
+    console.log('Sorry, this is not something I know how to do.');
 }

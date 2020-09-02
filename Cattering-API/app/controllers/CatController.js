@@ -1,9 +1,8 @@
-const Cat = require('../models/Cat');
-const crypto = require('crypto');
-let cats = [];
-const uuid = require('uuid');
+const fs = require('fs');
 
-function getCats(id) {
+const getCats = (id) => {
+  let cats = fs.readFileSync('cats.json', 'utf8');
+  cats = JSON.parse(cats);
   if (typeof id === 'number') {
     for (let i = 0; i < cats.length; i++) {
       if (cats[i].id === id) {
@@ -14,35 +13,34 @@ function getCats(id) {
   } else {
     return cats;
   }
-}
+};
 
-function storeCats(cat) {
+const storeCats = (cat) => {
+  let cats = getCats();
   cat.id = cats.length + 1;
   for (let i = 0; i < cats.length; i++) {
     if (cats[i].cat === cat.cat) {
       return 409;
     }
   }
-  cats.push(new Cat(cat.id, cat.cat));
-  // TODO: Move 'secret' to env file
-  const secret = 'meowCat21';
   const key = '_' + cat.id + Math.random().toString(36).substr(2, 9);
+  cat.key = key;
+
+  //  Append to file
+  cats.push({ id: cat.id, cat: cat.cat, meows: 0, key: cat.key });
+  cats = JSON.stringify(cats);
+
+  fs.writeFile('cats.json', cats, (err) => {
+    if (err) throw err;
+    console.log('Your cat joined the club!');
+  });
+
   console.log(key);
   return key;
-}
-
-//  TODO: Remove this function as it is not required
-function deleteCats(id) {
-  console.log('ID: ', id);
-  console.log('Length: ', cats.length);
-  const catsBeforeDelete = cats.length;
-  cats = cats.filter((cat) => cat.id !== parseInt(id));
-  return cats.length !== catsBeforeDelete;
-}
+};
 
 const CatsController = function () {};
 CatsController.prototype.getCats = getCats;
 CatsController.prototype.storeCats = storeCats;
-CatsController.prototype.deleteCats = deleteCats;
 
 module.exports = new CatsController();
