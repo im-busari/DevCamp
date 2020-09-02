@@ -10,6 +10,7 @@ function storeCats(cat) {
   cats.push(new Cat(cat.id, cat.name));
 }
 
+//  TODO: Remove this function as it is not required
 function deleteCats(id) {
   console.log('ID: ', id);
   console.log('Length: ', cats.length);
