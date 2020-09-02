@@ -1,6 +1,7 @@
 const Cat = require('../models/Cat');
 const crypto = require('crypto');
 let cats = [];
+const uuid = require('uuid');
 
 function getCats(id) {
   if (typeof id === 'number') {
@@ -25,7 +26,9 @@ function storeCats(cat) {
   cats.push(new Cat(cat.id, cat.cat));
   // TODO: Move 'secret' to env file
   const secret = 'meowCat21';
-  return crypto.createHmac('sha256', secret).update(cat.cat);
+  const key = '_' + cat.id + Math.random().toString(36).substr(2, 9);
+  console.log(key);
+  return key;
 }
 
 //  TODO: Remove this function as it is not required

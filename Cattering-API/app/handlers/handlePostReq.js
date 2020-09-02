@@ -33,7 +33,8 @@ module.exports.post = (req, res) => {
             res.statusCode = 409;
             res.end('Cat already exists');
           } else {
-            res.end('You Posted: ' + JSON.stringify(result));
+            res.setHeader('key', result);
+            res.end();
           }
           break;
 

@@ -4,8 +4,11 @@
   "description": "a twitter-like service for cats",
   "main": "index.js",
   "dependencies": {
+    "isomorphic-unfetch": "^3.0.0",
+    "minimist": "^1.2.5",
     "node-fetch": "^2.6.0",
     "prettier": "^2.1.1",
+    "uuid": "^8.3.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
