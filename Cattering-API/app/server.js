@@ -8,9 +8,6 @@ const handlePostReq = require('./handlers/handlePostReq');
 const handleDeleteReq = require('./handlers/handleDeleteReq');
 
 const server = http.createServer((req, res) => {
-  let urlParts = url.parse(req.url);
-  console.log(req.url, urlParts);
-
   //  direct the request to appropriate function to be processed based on the url pathname
   if (req.method === 'GET') {
     return handleGetReq.get(req, res);
@@ -19,7 +16,7 @@ const server = http.createServer((req, res) => {
   } else if (req.method === 'DELETE') {
     return handleDeleteReq.delete(req, res);
   } else if (req.method === 'PUT') {
-    res.end('Not today!');
+    res.end('Not today!!');
   }
 });
 
