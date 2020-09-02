@@ -1,4 +1,5 @@
 const Cat = require('../models/Cat');
+const crypto = require('crypto');
 let cats = [];
 
 function getCats(id) {
@@ -15,16 +16,16 @@ function getCats(id) {
 }
 
 function storeCats(cat) {
-  //returns a key for that cat.
   cat.id = cats.length + 1;
   for (let i = 0; i < cats.length; i++) {
-    if (cats[i].name === cat.name) {
+    if (cats[i].cat === cat.cat) {
       return 409;
     }
   }
-  cats.push(new Cat(cat.id, cat.name));
-  // generate unique key for the cat
-  return '_' + Math.random().toString(36).substr(2, 9);
+  cats.push(new Cat(cat.id, cat.cat));
+  // TODO: Move 'secret' to env file
+  const secret = 'meowCat21';
+  return crypto.createHmac('sha256', secret).update(cat.cat);
 }
 
 //  TODO: Remove this function as it is not required

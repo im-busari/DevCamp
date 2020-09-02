@@ -4,7 +4,9 @@
   "description": "a twitter-like service for cats",
   "main": "index.js",
   "dependencies": {
-    "prettier": "^2.1.1"
+    "node-fetch": "^2.6.0",
+    "prettier": "^2.1.1",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

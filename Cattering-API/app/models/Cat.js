@@ -1,7 +1,7 @@
 class Cat {
-  constructor(id, name) {
+  constructor(id, cat) {
     this.id = id;
-    this.name = name;
+    this.cat = cat;
     this.meows = 0;
   }
 }
