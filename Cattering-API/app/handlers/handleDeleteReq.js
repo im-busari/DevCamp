@@ -24,11 +24,7 @@ module.exports.delete = (req, res) => {
           break;
         case 204:
           res.statusCode = 204;
-          res.end(
-            JSON.stringify(
-              `Couldn't find meow that belongs to you, with id:${id}`
-            )
-          );
+          res.end(JSON.stringify(`Meow deleted successfully`));
       }
       break;
     default:

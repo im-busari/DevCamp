@@ -75,15 +75,13 @@ describe('Cattering_API', () => {
   });
 
   //  TODO: Fix the below (403)
-  it('should return 403 - meow doesnt exist', () => {
+  it('should return 403 - meow doesnt exist', (done) => {
     chai
       .request(server)
       .get('/meows/23')
-      .then((res) => {
+      .end((res) => {
         expect(res).to.have.status(404);
-      })
-      .catch((err) => {
-        console.error(err);
+        done();
       });
   });
 
@@ -110,16 +108,14 @@ describe('Cattering_API', () => {
   });
 
   //  TODO: Fix the below
-  it('should return 409 since cat exists', () => {
+  it('should return 409 since cat exists', (done) => {
     chai
       .request(server)
       .post('/register')
       .send({ cat: 'D' })
-      .then((res) => {
+      .end((res) => {
         expect(res).to.have.status(409);
-      })
-      .catch((err) => {
-        console.error(err);
+        done();
       });
   });
   it('should create new meow and add it to meow.json', (done) => {
@@ -133,7 +129,8 @@ describe('Cattering_API', () => {
       });
   });
 
-  it('should delete meow from meows.json', () => {
+  it('should delete meow from meows.json', function (done) {
+    this.timeout(1000);
     chai
       .request(server)
       .delete('/meows/2/Dilan/_1zthqh9zxz')
@@ -142,10 +139,13 @@ describe('Cattering_API', () => {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        done();
       });
   });
 
-  it('should fail to delete meow since it does not exist', () => {
+  it('should fail to delete meow since it does not exist', (done) => {
     chai
       .request(server)
       .delete('/meows/2/Dilan/_1zthqh9zxz')
@@ -154,6 +154,9 @@ describe('Cattering_API', () => {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        done();
       });
   });
 });
