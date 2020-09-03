@@ -12,15 +12,23 @@ module.exports.delete = (req, res) => {
   switch (pathname) {
     case `/meows/${id}/${cat}/${key}`:
       let result = Meow.deleteMeow(id, cat, key);
-      if (result === 403) {
-        res.statusCode = 403;
-        res.end(
-          JSON.stringify(
-            `Couldn't find cat with id:${id} or maybe you are not authorized to delete it.`
-          )
-        );
-      } else {
-        res.end(JSON.stringify(result));
+
+      switch (result) {
+        case 403:
+          res.statusCode = 403;
+          res.end(
+            JSON.stringify(
+              `Couldn't find meow that belongs to you, with id:${id}`
+            )
+          );
+          break;
+        case 204:
+          res.statusCode = 204;
+          res.end(
+            JSON.stringify(
+              `Couldn't find meow that belongs to you, with id:${id}`
+            )
+          );
       }
       break;
     default:

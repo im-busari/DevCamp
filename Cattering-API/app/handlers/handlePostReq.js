@@ -37,12 +37,14 @@ module.exports.post = (req, res) => {
             res.end('Cat already exists');
           } else {
             res.setHeader('key', result);
+            res.statusCode = 201;
             res.end();
           }
           break;
 
         case `/meows/${cat}/${key}`:
           result = Meows.storeMeow(data, cat, key);
+          res.statusCode = 201;
           res.end(JSON.stringify(result));
           break;
 

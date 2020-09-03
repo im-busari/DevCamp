@@ -21,9 +21,8 @@ const getMeows = (id) => {
         return meows[i];
       }
     }
-    return "We can't find the MeoW MeoW...";
+    return 404;
   } else {
-    //  TODO: Should not show key
     return meows;
   }
 };
@@ -96,7 +95,7 @@ const deleteMeow = (id, cat, key) => {
         meows = JSON.stringify(meows);
         fs.writeFile('meows.json', meows, (err) => {
           if (err) throw err;
-          return `Removed MeoW with id: ${id}.`;
+          return 204;
         });
         break;
       } else if (i + 1 === meows.length) {
