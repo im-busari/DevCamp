@@ -5,7 +5,7 @@ const Meows = require('../controllers/MeowController');
 module.exports.get = (req, res) => {
   const { pathname } = url.parse(req.url);
   const id = parseInt(pathname.split('/')[2]); // get ID
-  const cat = parseInt(pathname.split('/')[2]);
+  const cat = pathname.split('/')[2];
   const key = pathname.split('/')[3];
 
   res.setHeader('Content-Type', 'application/json;charset=utf-8');

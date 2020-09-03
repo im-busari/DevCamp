@@ -6,6 +6,9 @@ module.exports.post = (req, res) => {
   const size = parseInt(req.headers['content-length'], 10);
   const buffer = Buffer.allocUnsafe(size);
   const { pathname } = url.parse(req.url);
+  const cat = pathname.split('/')[2];
+  const key = pathname.split('/')[3];
+  console.log(cat, key);
   let pos = 0;
 
   req
@@ -38,10 +41,9 @@ module.exports.post = (req, res) => {
           }
           break;
 
-        case '/meows':
-          result = Meows.storeMeow(data);
-          res.setHeader('meow_id', result);
-          res.end('Your new meow_id: ' + JSON.stringify(result));
+        case `/meows/${cat}/${key}`:
+          result = Meows.storeMeow(data, cat, key);
+          res.end(JSON.stringify(result));
           break;
 
         default:

@@ -35,7 +35,7 @@ const storeCats = (cat) => {
     console.log('Your cat joined the club!');
   });
 
-  console.log(key);
+  //  TODO: REMOVE console.log(key);
   return key;
 };
 

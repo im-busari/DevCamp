@@ -3,6 +3,7 @@ let config = require('./config.json');
 let argv = require('minimist')(process.argv.slice(2));
 const CatApi = require('./CatApi');
 let myArgs = process.argv.slice(2);
+console.log(argv);
 
 const api = new CatApi({
   api_url: config.api_url,
@@ -24,16 +25,23 @@ function updateConfigFile(cat, key) {
   });
 }
 
+/*
+REGISTER cat: $ node cattering_client.js --register --cat=Shusia
+GET all meows: $ node cattering_client.js --getall
+GET my meows: $ node cattering_client.js --getself
+CREATE new meow: $ node cattering_client.js --create --message="Why do the humans get mad when I wake them up?"
+DELETE a meow: $ node cattering_client.js --delete --meowid=12
+ */
+
 switch (myArgs[0]) {
   case '--register':
     if (argv['cat']) {
       api
         .createCat({ cat: argv['cat'] })
         .then((res) => {
-          console.log(res.headers.get('key'));
+          //  console.log(res.headers.get('key'));
           if (res.status === 200) {
             updateConfigFile(argv['cat'], res.headers.get('key'));
-            console.log('Done');
           } else {
             throw new Error('An error occurred..');
           }
@@ -46,17 +54,66 @@ switch (myArgs[0]) {
     }
     break;
   case '--getall':
-    //  Return all meows in JSON format
+    api
+      .getAllMeows()
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.table(data);
+      });
     break;
   case '--getself':
-    //  Get my meows
+    if (!config.cat) return console.log('Please create a cat first...');
+    api
+      .getSelfMeows(config.cat, config.key)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.table(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     break;
   case '--create':
-  //  This call requires cat and key from config.json file
-  //  Create new meow with --message...
+    if (!config.cat) return console.log('Please create a cat first...');
+
+    if (argv['message']) {
+      api
+        .createMeow({ text: argv['message'] }, config.cat, config.key)
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.table(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      console.log('Please provide message...');
+    }
+    break;
   case '--delete':
-    //  This call requires cat and key from config.json file
-    //  Should delete a meow with given --meowid...
+    if (!config.cat) return console.log('Please create a cat first...');
+
+    if (argv['meowid']) {
+      api
+        .deleteMeow({ id: argv['meowid'] }, config.cat, config.key)
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          console.table(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      console.log('Please provide message...');
+    }
     break;
 
   default:

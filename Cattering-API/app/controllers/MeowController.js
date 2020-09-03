@@ -1,10 +1,11 @@
 const fs = require('fs');
 const Cats = require('./CatController');
 
-const findCat = (id, key) => {
+const findCat = (cat, key) => {
   let cats = Cats.getCats();
+  console.log(cat, key);
   for (let i = 0; i < cats.length; i++) {
-    if (cats[i].id === parseInt(id) && cats[i].key === key) {
+    if (cats[i].cat === cat && cats[i].key === key) {
       return true;
     }
   }
@@ -30,12 +31,11 @@ const getMeows = (id) => {
 const getMyMeows = (cat, key) => {
   let meows = getMeows();
   let myMeows = [];
-
   let catExists = findCat(cat, key);
 
   if (catExists) {
     for (let i = 0; i < meows.length; i++) {
-      if (meows[i].createdBy === parseInt(cat)) {
+      if (meows[i].createdBy === cat) {
         myMeows.push(meows[i]);
       }
     }
@@ -49,8 +49,9 @@ const getMyMeows = (cat, key) => {
   }
 };
 
-const storeMeow = (meow) => {
+const storeMeow = (meow, cat, key) => {
   let meows = getMeows();
+  let catExists = findCat(cat, key);
   meow.id = meows.length + 1;
 
   //  Format Date
@@ -63,38 +64,49 @@ const storeMeow = (meow) => {
 
   today = `${dd}-${mm}-${yyyy} ${hh}:${min}`;
 
-  //  Append to file
-  meows.push({
-    id: meow.id,
-    createdBy: meow.createdBy,
-    text: meow.text,
-    createdAt: today,
-  });
-  meows = JSON.stringify(meows);
+  if (catExists) {
+    //  Append to file
+    meows.push({
+      id: meow.id,
+      createdBy: cat, // this must be cat.id
+      text: meow.text,
+      createdAt: today,
+    });
+    meows = JSON.stringify(meows);
+    fs.writeFile('meows.json', meows, (err) => {
+      if (err) throw err;
+      console.log(`We added your MeoW to the list.`);
+    });
 
-  fs.writeFile('meows.json', meows, (err) => {
-    if (err) throw err;
-    console.log(`We added your MeoW to the list.`);
-  });
-
-  return meow.id;
+    return meow.id;
+  } else {
+    return "You don't exist...";
+  }
 };
 
-const deleteMeow = (id) => {
+const deleteMeow = (id, cat, key) => {
   let meows = getMeows();
   const meowsBeforeDelete = meows.length;
-  if (typeof id === 'number') {
-    meows = meows.filter((meow) => meow.id !== parseInt(id));
-    if (meowsBeforeDelete !== meows.length) {
-      meows = JSON.stringify(meows);
-      fs.writeFile('meows.json', meows, (err) => {
-        if (err) throw err;
-        console.log(`Removed MeoW with id: ${id}.`);
-      });
-      return `Meow with id=${id} was removed`;
+  let myMeows = [];
+  let catExists = findCat(cat, key);
+  if (catExists) {
+    for (let i = 0; i < meows.length; i++) {
+      if (meows[i].createdBy === cat && meows[i].id === parseInt(id)) {
+        meows.splice(i, 1);
+        meows = JSON.stringify(meows);
+        fs.writeFile('meows.json', meows, (err) => {
+          if (err) throw err;
+          return `Removed MeoW with id: ${id}.`;
+        });
+        break;
+      } else if (i + 1 === meows.length) {
+        return 403;
+      }
     }
+    return `Meow with id=${id} was removed`;
+  } else {
+    return 'Cat credentials are missing...';
   }
-  return 403;
 };
 
 const MeowController = function () {};
