@@ -38,8 +38,9 @@ module.exports.post = (req, res) => {
           }
           break;
 
-        case '/meow':
+        case '/meows':
           result = Meows.storeMeow(data);
+          res.setHeader('meow_id', result);
           res.end('Your new meow_id: ' + JSON.stringify(result));
           break;
 
