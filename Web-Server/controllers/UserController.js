@@ -1,25 +1,28 @@
 const User = require('../models/User');
 
 class UserController {
-  get(req, res) {
-    User.findAll()
+  async get(req, res) {
+    await User.findAll()
       .then((users) => {
-        console.log(users);
-        res.status(200);
-        res.send('User GET req');
+        res.status(200).json(users);
       })
       .catch((err) => console.error(err));
   }
 
-  post(req, res) {
-    //  const jane = User.build({ name: "Jane" });
-
-    // await jane.save();
-    // console.log('Jane was saved to the database!');
-
-    //  const jane = await User.create({ name: "Jane" }); --> this combines build & save
-    //  console.log(jane.toJSON());  ===== (JSON.stringify(jane, null, 4))
-    res.send('New User with username .... was created');
+  async signup(req, res) {
+    try {
+      const user = await User.create({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password, // Hashing set function inside the module
+      });
+      res.status(201).send(user.toJSON());
+    } catch (err) {
+      console.error(err);
+      res.status(403).send(err.errors[0].message);
+    }
   }
 
   update(req, res) {
