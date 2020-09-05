@@ -1,11 +1,11 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const models = require('../models/index');
 
 class UserController {
   getAllUsers(req, res) {
-    User.findAll()
+    models.User.findAll()
       .then((users) => {
         res.status(200).json(users);
       })
@@ -13,9 +13,9 @@ class UserController {
   }
 
   signup(req, res) {
-    User.create({
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
+    models.User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       username: req.body.username,
       email: req.body.email,
       password: req.body.password, // Hashing set function inside the module
@@ -29,7 +29,7 @@ class UserController {
   }
 
   signin(req, res) {
-    User.findOne({ where: { username: req.body.username } })
+    models.User.findOne({ where: { username: req.body.username } })
       .then((user) => {
         if (
           req.body.password &&

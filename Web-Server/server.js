@@ -1,8 +1,7 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 4000;
-const db = require('./config/database');
+const db = require('./models/index');
 
 const server = express();
 server.use(
@@ -11,11 +10,12 @@ server.use(
   })
 );
 server.use(bodyParser.json());
-
+console.log(`Your SERVER: ${process.env.NODE_ENV}`);
 // TEST DB connection
-db.authenticate()
-  .then(() => console.log('DB connected'))
-  .catch((err) => console.log('Error: ', err));
+// db.sequelize
+//   .authenticate()
+//   .then(() => console.log('DB connected'))
+//   .catch((err) => console.log('Error: ', err));
 
 server.get('/', (req, res) => {
   res.send('Routing works');
