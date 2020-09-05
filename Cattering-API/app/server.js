@@ -9,18 +9,22 @@ const handleDeleteReq = require('./handlers/handleDeleteReq');
 
 const server = http.createServer((req, res) => {
   //  direct the request to appropriate function to be processed based on the url pathname
-  if (req.method === 'GET') {
-    return handleGetReq.get(req, res);
-  } else if (req.method === 'POST') {
-    return handlePostReq.post(req, res);
-  } else if (req.method === 'DELETE') {
-    return handleDeleteReq.delete(req, res);
-  } else if (req.method === 'PUT') {
-    res.end('Not today!!');
+  switch(req.method) {
+    case 'GET':
+      return handleGetReq.get(req, res);
+    case 'POST':
+      return handlePostReq.post(req, res);
+    case 'DELETE':
+      return handleDeleteReq.delete(req, res);
+    default:
+      return res.end(JSON.stringify(`I can't handle this type of operations.`))
   }
 });
 
-// Our HTTP server that accepts requests to port 8080
-server.listen(port, () => {
-  console.log(`Server listening on port http://localhost:${port}/`);
-});
+
+// server.listen(port, () => {
+//   console.log(`Server listening on port http://localhost:${port}/`);
+// })
+
+module.exports= server;
+

@@ -1,4 +1,3 @@
-const qs = require('querystring');
 const url = require('url');
 const Meow = require('../controllers/MeowController');
 
@@ -11,23 +10,23 @@ module.exports.delete = (req, res) => {
   res.setHeader('Content-Type', 'application/json;charset=utf-8');
   switch (pathname) {
     case `/meows/${id}/${cat}/${key}`:
-      let result = Meow.deleteMeow(id, cat, key);
+      const result = Meow.deleteMeow(id, cat, key);
 
       switch (result) {
         case 403:
           res.statusCode = 403;
           res.end(
-            JSON.stringify(
-              `Couldn't find meow that belongs to you, with id:${id}`
-            )
+            JSON.stringify('Couldnt find meow...')
           );
           break;
         case 204:
           res.statusCode = 204;
-          res.end(JSON.stringify(`Meow deleted successfully`));
+          res.end(JSON.stringify('Meow deleted successfully'));
       }
       break;
     default:
-      return res.end("Can't access...");
+      res.statusCode = 403;
+      res.end(JSON.stringify("Can't access..."));
+      break;
   }
 };

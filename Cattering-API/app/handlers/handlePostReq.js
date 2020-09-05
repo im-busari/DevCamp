@@ -8,7 +8,6 @@ module.exports.post = (req, res) => {
   const { pathname } = url.parse(req.url);
   const cat = pathname.split('/')[2];
   const key = pathname.split('/')[3];
-  console.log(cat, key);
   let pos = 0;
 
   req
@@ -34,11 +33,11 @@ module.exports.post = (req, res) => {
           result = Cats.storeCats(data);
           if (result === 409) {
             res.statusCode = 409;
-            res.end('Cat already exists');
+            res.end(JSON.stringify('Cat already exists'));
           } else {
             res.setHeader('key', result);
             res.statusCode = 201;
-            res.end();
+            res.end(JSON.stringify("Successfully created a cat."));
           }
           break;
 
@@ -49,8 +48,7 @@ module.exports.post = (req, res) => {
           break;
 
         default:
-          console.log("Can't find path...");
-          res.end("Can't find path...");
+          res.end(JSON.stringify("Can't find path..."));
       }
     });
 };

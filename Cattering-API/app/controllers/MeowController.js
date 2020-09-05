@@ -3,7 +3,6 @@ const Cats = require('./CatController');
 
 const findCat = (cat, key) => {
   let cats = Cats.getCats();
-  console.log(cat, key);
   for (let i = 0; i < cats.length; i++) {
     if (cats[i].cat === cat && cats[i].key === key) {
       return true;
@@ -85,8 +84,6 @@ const storeMeow = (meow, cat, key) => {
 
 const deleteMeow = (id, cat, key) => {
   let meows = getMeows();
-  const meowsBeforeDelete = meows.length;
-  let myMeows = [];
   let catExists = findCat(cat, key);
   if (catExists) {
     for (let i = 0; i < meows.length; i++) {

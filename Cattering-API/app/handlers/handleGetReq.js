@@ -17,16 +17,16 @@ module.exports.get = (req, res) => {
     case `/meows`:
       return res.end(JSON.stringify(Meows.getMeows()));
     case `/meows/${id}`:
-      let result = Meows.getMeows(id);
+      const result = Meows.getMeows(id);
       if (result === 404) {
         res.statusCode = 404;
-        return res.end("We can't find the MeoW MeoW...");
+        return res.end(JSON.stringify("We can't find the MeoW MeoW..."));
       } else {
         return res.end(JSON.stringify(result));
       }
     case `/my_meows/${cat}/${key}`:
       return res.end(JSON.stringify(Meows.getMyMeows(cat, key)));
     default:
-      return res.end("Can't access...");
+      return res.end(JSON.stringify("Can't access..."));
   }
 };
