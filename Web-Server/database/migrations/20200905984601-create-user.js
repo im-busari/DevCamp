@@ -8,6 +8,24 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      bioId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'UserBios',
+          },
+          key: 'id',
+        },
+      },
+      roleId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'Roles',
+          },
+          key: 'id',
+        },
+      },
       firstName: {
         type: Sequelize.STRING,
       },
@@ -24,10 +42,6 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-      },
-      bio: {
-        type: Sequelize.INTEGER,
-        foreignKey: true,
       },
       createdAt: {
         allowNull: false,

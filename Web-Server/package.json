@@ -25,8 +25,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "set NODE_ENV=development&& nodemon server.js",
-    "pretest": "set NODE_ENV=test sequelize db:migrate",
-    "test": "set NODE_ENV=test&& mocha '***/test/**/*.js' --exit"
+    "pretest": "set NODE_ENV=test&& sequelize db:migrate:undo:all&& sequelize db:migrate&& sequelize db:seed:all",
+    "test": "set NODE_ENV=test&& mocha '***/test/**/*.js' --exit&& sequelize db:migrate:undo:all"
   },
   "author": "Immanuella Busari",
   "license": "ISC"

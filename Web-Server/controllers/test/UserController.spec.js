@@ -11,21 +11,18 @@ chai.use(chaiHttp);
 let authToken = '';
 
 describe('User controller', () => {
-  before(() => {
-    //  empty DB tables before you run the tests
-    return models.User.truncate();
-  });
-
   it('should CREATE new user with unique username and email and return status code 201', (done) => {
     chai
       .request(server)
       .post('/users/signup')
       .send({
-        firstName: 'Johny',
-        lastName: 'Dep',
-        username: 'burundi',
-        email: 'd.george@gmail.com',
+        firstName: 'Simeon',
+        lastName: 'Busari',
+        username: 'Lasttt',
+        email: 'emi.lastt@d.com',
         password: '1234',
+        content: 'Software Developer',
+        caption: 'Fabulous',
       })
       .end((err, res) => {
         expect(res).to.have.status(201);
@@ -41,8 +38,8 @@ describe('User controller', () => {
       .send({
         firstName: 'Johny',
         lastName: 'Dep',
-        username: 'burundi',
-        email: 'd.george@gmail.com',
+        username: 'Lasttt',
+        email: 'emi.lastt@d.com',
         password: '1234',
       })
       .end((err, res) => {
@@ -67,7 +64,7 @@ describe('User controller', () => {
       .request(server)
       .post('/users/signin')
       .send({
-        username: 'burundi',
+        username: 'Lasttt',
         password: '1234',
       })
       .end((err, res) => {
@@ -105,8 +102,8 @@ describe('User controller', () => {
         expect(res.body)
           .to.be.an.instanceof(Object)
           .and.to.have.property('user');
-        expect(res.body.user.username).to.equal('burundi');
-        expect(res.body.user.email).to.equal('d.george@gmail.com');
+        expect(res.body.user.username).to.equal('Lasttt');
+        expect(res.body.user.email).to.equal('emi.lastt@d.com');
         done();
       });
   });

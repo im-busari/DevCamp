@@ -1,10 +1,16 @@
 const bcrypt = require('bcrypt');
-
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      this.UserBio = this.hasOne(models.UserBio);
+      this.UserBio = User.belongsTo(models.UserBio, {
+        foreignKey: 'bioId',
+      });
+      this.Role = User.belongsTo(models.Role, {
+        foreignKey: 'roleId',
+        as: 'role',
+      });
     }
   }
   User.init(
@@ -74,10 +80,9 @@ module.exports = (sequelize, DataTypes) => {
           //  TODO: Add RegExp
         },
       },
-      bio: {
+      roleId: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        validate: {},
+        defaultValue: 2,
       },
     },
     {
