@@ -11,6 +11,25 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'roleId',
         as: 'role',
       });
+      this.Relationship = User.hasMany(models.Relationship, {
+        as: 'active_relationships',
+        foreignKey: 'follower_id',
+        onDelete: 'cascade',
+        hooks: true,
+      });
+
+      User.belongsToMany(User, {
+        as: 'following',
+        through: 'Relationships',
+        foreignKey: 'follower_id',
+        onDelete: 'cascade',
+      });
+      User.belongsToMany(User, {
+        as: 'followers',
+        through: 'Relationships',
+        foreignKey: 'followed_id',
+        onDelete: 'cascade',
+      });
     }
   }
   User.init(
@@ -83,6 +102,15 @@ module.exports = (sequelize, DataTypes) => {
       roleId: {
         type: DataTypes.INTEGER,
         defaultValue: 2,
+      },
+      fullName: {
+        type: DataTypes.VIRTUAL,
+        get() {
+          return `${this.firstName} ${this.lastName}`;
+        },
+        set(value) {
+          throw new Error('Do not try to set the `fullName` value!');
+        },
       },
     },
     {

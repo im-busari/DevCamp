@@ -14,7 +14,7 @@ router.patch('/me', isAuth, UserController.updateSelf);
 router.get('/:username/exists', UserController.checkUsername);
 //  router.get('/:identifier', UserController.getByIdentifier);  --> TODO - change ID to UUID
 
-router.post('/:id/follow', UserController.followUser);
-router.post('/:id/unfollow', UserController.unfollowUser);
+router.post('/:followedId/follow', isAuth, UserController.followUser);
+router.post('/:followedId/unfollow', isAuth, UserController.unfollowUser);
 
 module.exports = router;
