@@ -4,7 +4,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+      this.UserBio = this.hasOne(models.UserBio);
     }
   }
   User.init(
@@ -74,12 +74,18 @@ module.exports = (sequelize, DataTypes) => {
           //  TODO: Add RegExp
         },
       },
+      bio: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        validate: {},
+      },
     },
     {
       sequelize,
       modelName: 'User',
     }
   );
+
   User.sync()
     .then(() => console.log('User model synced successfully'))
     .catch((err) => console.error(err));

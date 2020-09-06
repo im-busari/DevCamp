@@ -25,6 +25,10 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
+      bio: {
+        type: Sequelize.INTEGER,
+        foreignKey: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
