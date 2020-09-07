@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'UserBio',
     }
   );
-  UserBio.sync()
+  UserBio.sync({ force: true })
     .then(() => console.log('UserBio model synced successfully'))
     .catch((err) => console.error(err));
   return UserBio;

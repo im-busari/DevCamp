@@ -22,6 +22,7 @@ server.get('/', (req, res) => {
 });
 
 server.use('/users', require('./routes/users'));
+server.use('/posts', require('./routes/posts'));
 
 switch (process.env.NODE_ENV) {
   case 'test':

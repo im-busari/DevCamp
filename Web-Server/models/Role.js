@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Role',
     }
   );
-  Role.sync()
+  Role.sync({ force: true })
     .then(() => console.log('Role model synced successfully'))
     .catch((err) => console.error(err));
   return Role;

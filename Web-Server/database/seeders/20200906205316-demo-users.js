@@ -39,7 +39,7 @@ module.exports = {
           updatedAt: new Date(),
         },
       ],
-      {}
+      { validate: true, individualHooks: true }
     );
   },
 

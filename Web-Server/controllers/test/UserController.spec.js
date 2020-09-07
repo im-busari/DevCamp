@@ -9,6 +9,9 @@ chai.use(chaiHttp);
 //  TODO: Fix eslint
 
 let authToken = '';
+let username = 'onepiece';
+let email = 'onepiece@ax.com';
+let password = '1234';
 
 describe('User controller', () => {
   it('should CREATE new user with unique username and email and return status code 201', (done) => {
@@ -18,9 +21,9 @@ describe('User controller', () => {
       .send({
         firstName: 'Simeon',
         lastName: 'Busari',
-        username: 'Lasttt',
-        email: 'emi.lastt@d.com',
-        password: '1234',
+        username: username,
+        email: email,
+        password: password,
         content: 'Software Developer',
         caption: 'Fabulous',
       })
@@ -179,6 +182,56 @@ describe('User controller', () => {
       .set('Authorization', `Bearer ${authToken}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('should get all the users the userId in url follows and return status code 200', (done) => {
+    chai
+      .request(server)
+      .get('/users/2/following')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it('should FAIL to get all the users the userId in url follows because user does not exist - status code 404', (done) => {
+    chai
+      .request(server)
+      .get('/users/2000/following')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it('should GET all the users the userId in url follows and return status code 200', (done) => {
+    chai
+      .request(server)
+      .get('/users/2/followers')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+
+  it(`should FAIL to GET user's followers because user does not exist - status code 404`, (done) => {
+    chai
+      .request(server)
+      .get('/users/2000/followers')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  it(`should take user's posts with status 200`, (done) => {
+    chai
+      .request(server)
+      .get('/users/2/posts')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
         done();
       });
   });

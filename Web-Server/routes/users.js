@@ -16,5 +16,9 @@ router.get('/:username/exists', UserController.checkUsername);
 
 router.post('/:followedId/follow', isAuth, UserController.followUser);
 router.post('/:followedId/unfollow', isAuth, UserController.unfollowUser);
+router.get('/:userId/following', UserController.getAllFollowed);
+router.get('/:userId/followers', UserController.getAllFollowers);
+
+router.get('/:userId/posts', UserController.getUserPosts); // TODO - create a test
 
 module.exports = router;

@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         hooks: true,
       });
+      User.hasMany(models.Post, {
+        foreignKey: 'userId',
+        onDelete: 'cascade',
+      });
 
       User.belongsToMany(User, {
         as: 'following',
@@ -119,7 +123,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.sync()
+  User.sync({ force: true })
     .then(() => console.log('User model synced successfully'))
     .catch((err) => console.error(err));
   return User;

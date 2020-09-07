@@ -158,6 +158,60 @@ class UserController {
       res.status(500).send('Something went wrong. ', err);
     }
   }
+
+  //  Gets the users a user follows
+  async getAllFollowed(req, res) {
+    try {
+      const user = await User.findByPk(req.params.userId);
+
+      if (user) {
+        const followings = await user.getFollowing();
+        res.status(200).send({
+          following: followings,
+        });
+      } else {
+        res.status(404).send('User does not exists.');
+      }
+    } catch (err) {
+      res.status(500).send('Something went wrong. ', err);
+    }
+  }
+
+  //  Gets user's followers
+  async getAllFollowers(req, res) {
+    try {
+      const user = await User.findByPk(req.params.userId);
+
+      if (user) {
+        const followers = await user.getFollowers();
+        res.status(200).send({
+          followers: followers,
+        });
+      } else {
+        res.status(404).send('User does not exists.');
+      }
+    } catch (err) {
+      res.status(500).send('Something went wrong. ', err);
+    }
+  }
+
+  //  Get user's posts
+  async getUserPosts(req, res) {
+    try {
+      const user = await User.findByPk(req.params.userId);
+
+      if (user) {
+        const posts = await user.getPosts();
+        res.status(200).send({
+          posts: posts,
+        });
+      } else {
+        res.status(404).send('User does not exists.');
+      }
+    } catch (err) {
+      res.status(500).send('Something went wrong. ', err);
+    }
+  }
 }
 
 module.exports = new UserController();
