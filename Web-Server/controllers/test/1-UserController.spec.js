@@ -8,7 +8,9 @@ const models = require('../../models/index');
 chai.use(chaiHttp);
 //  TODO: Fix eslint
 
-let authToken = '';
+let authTokenUser = '';
+let authTokenAdmin = '';
+
 let username = 'onepiece';
 let email = 'onepiece@ax.com';
 let password = '1234';
@@ -41,9 +43,9 @@ describe('User controller', () => {
       .send({
         firstName: 'Johny',
         lastName: 'Dep',
-        username: 'Lasttt',
-        email: 'emi.lastt@d.com',
-        password: '1234',
+        username: username,
+        email: email,
+        password: password,
       })
       .end((err, res) => {
         expect(res).to.have.status(403);
@@ -62,16 +64,35 @@ describe('User controller', () => {
       });
   });
 
-  it('should login successfully and the res.body should have a token', (done) => {
+  it('should login successfully as a user and the res.body should have a token', (done) => {
     chai
       .request(server)
       .post('/users/signin')
       .send({
-        username: 'Lasttt',
+        username: username,
+        password: password,
+      })
+      .end((err, res) => {
+        authTokenUser = res.body.token;
+
+        expect(res).to.have.status(200);
+        expect(res.body)
+          .to.be.an.instanceof(Object)
+          .and.to.have.property('token');
+        done();
+      });
+  });
+
+  it('should login successfully as an Admin and the res.body should have a token', (done) => {
+    chai
+      .request(server)
+      .post('/users/signin')
+      .send({
+        username: 'moonellator',
         password: '1234',
       })
       .end((err, res) => {
-        authToken = res.body.token;
+        authTokenAdmin = res.body.token;
 
         expect(res).to.have.status(200);
         expect(res.body)
@@ -86,7 +107,7 @@ describe('User controller', () => {
       .request(server)
       .post('/users/signin')
       .send({
-        username: 'burundi',
+        username: username,
         password: '2',
       })
       .end((err, res) => {
@@ -99,12 +120,12 @@ describe('User controller', () => {
     chai
       .request(server)
       .get('/users/me')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an.instanceof(Object);
-        expect(res.body.username).to.equal('Lasttt');
-        expect(res.body.email).to.equal('emi.lastt@d.com');
+        expect(res.body.username).to.equal(username);
+        expect(res.body.email).to.equal(email);
         done();
       });
   });
@@ -123,7 +144,7 @@ describe('User controller', () => {
     chai
       .request(server)
       .patch('/users/me')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .send({
         firstName: 'Immanuella',
         city: 'Varna',
@@ -138,7 +159,7 @@ describe('User controller', () => {
     chai
       .request(server)
       .post('/users/2/follow')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body.followed_user)
@@ -153,7 +174,7 @@ describe('User controller', () => {
     chai
       .request(server)
       .post('/users/2/follow')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
         done();
@@ -164,7 +185,7 @@ describe('User controller', () => {
     chai
       .request(server)
       .post('/users/2/unfollow')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.unfollowed_user)
@@ -179,7 +200,7 @@ describe('User controller', () => {
     chai
       .request(server)
       .post('/users/2/unfollow')
-      .set('Authorization', `Bearer ${authToken}`)
+      .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
         done();
@@ -234,5 +255,20 @@ describe('User controller', () => {
         expect(res).to.have.status(200);
         done();
       });
+  });
+
+  it(`should fail to take user's posts because user doesn't exist = expecting status code 404.`, (done) => {
+    chai
+      .request(server)
+      .get('/users/56/posts')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
+  after(() => {
+    // let's use authenticated user inside other tests as well
+    module.exports = { authTokenUser, authTokenAdmin };
   });
 });

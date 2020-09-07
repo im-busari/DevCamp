@@ -12,13 +12,17 @@ class PostController {
     }
   }
 
-  //  Create new post if user Auth
+  //  get Post By Id in url address
   async getPostById(req, res) {
     try {
       const postId = req.params.postId;
 
       const post = await Post.findByPk(postId, { include: User });
-      res.status(200).send(post);
+      if (post) {
+        res.status(200).send(post);
+      } else {
+        res.status(404).send("Couldn't find anything.");
+      }
     } catch (err) {
       res.status(500).send(err);
     }
@@ -50,7 +54,7 @@ class PostController {
       const post = await Post.findByPk(postId, {
         include: User,
       });
-      const user = await post.getUser();
+      const user = await User.findOne({ where: { id: userId } });
 
       if (user.roleId === 1 || post.userId === userId) {
         await post.update(req.body);
@@ -77,7 +81,7 @@ class PostController {
       const post = await Post.findByPk(postId, {
         include: User,
       });
-      const user = await post.getUser();
+      const user = await User.findOne({ where: { id: userId } });
 
       if (user.roleId === 1 || post.userId === userId) {
         await post.destroy();

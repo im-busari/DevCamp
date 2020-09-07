@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Relationship.sync({ force: true })
+  Relationship.sync()
     .then(() => console.log('Relationship model synced successfully'))
     .catch((err) => console.error(err));
 

@@ -25,5 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Post',
     }
   );
+
+  Post.sync()
+    .then(() => console.log('Post model synced successfully'))
+    .catch((err) => console.error(err));
+
   return Post;
 };

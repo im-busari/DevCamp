@@ -123,7 +123,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.sync({ force: true })
+  User.sync()
     .then(() => console.log('User model synced successfully'))
     .catch((err) => console.error(err));
   return User;
