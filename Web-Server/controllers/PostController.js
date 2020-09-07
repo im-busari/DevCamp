@@ -1,4 +1,4 @@
-const { Post, User, Comment } = require('../models/index');
+const { Post, User } = require('../models/index');
 
 class PostController {
   //  Get All posts
@@ -44,7 +44,7 @@ class PostController {
     }
   }
 
-  //  Update post if it belongs to User or roleId === 1 (Admin)
+  //  Delete post only if it belongs to User
   async updatePost(req, res) {
     try {
       const userId = req.user.user.id;
@@ -53,9 +53,8 @@ class PostController {
       const post = await Post.findByPk(postId, {
         include: User,
       });
-      const user = await User.findOne({ where: { id: userId } });
 
-      if (user.roleId === 1 || post.userId === userId) {
+      if (post.userId === userId) {
         await post.update(req.body);
 
         res.status(200).json(post);
@@ -71,7 +70,7 @@ class PostController {
     }
   }
 
-  //  Update post if it belongs to User or role.name === Admin
+  //  Delete post if it belongs to User or role.name === Admin
   async deletePost(req, res) {
     try {
       const userId = req.user.user.id;
@@ -83,7 +82,7 @@ class PostController {
       const user = await User.findOne({ where: { id: userId } });
 
       console.log(post);
-      if (user.roleId === 1 || post.userId === userId) {
+      if (post && (user.roleId === 1 || post.userId === userId)) {
         await post.destroy();
 
         res.status(200).json('You will no longer see this post');

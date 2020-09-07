@@ -47,6 +47,13 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: 1,
+          title: 'Music is...',
+          content: 'Music',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       { validate: true, individualHooks: true }
     );

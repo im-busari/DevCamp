@@ -124,7 +124,7 @@ describe('Post controller', () => {
       });
   });
 
-  it('should UPDATE post since user is Admin. Expected res.status = 200', (done) => {
+  it('should FAIL to UPDATE post even though user is Admin. Expected res.status = 404', (done) => {
     chai
       .request(server)
       .patch('/posts/3')
@@ -134,13 +134,7 @@ describe('Post controller', () => {
       })
       .end((err, res) => {
         console.log(localAdminToken);
-        expect(res).to.have.status(200);
-        expect(res.body)
-          .to.be.an.instanceof(Object)
-          .and.to.have.property('title');
-        expect(res.body.title).to.equal(
-          'I have the authority to do whatever I want'
-        );
+        expect(res).to.have.status(404);
         done();
       });
   });

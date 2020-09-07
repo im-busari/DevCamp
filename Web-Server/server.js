@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 4000;
-const db = require('./models/index');
 
 const server = express();
 server.use(
@@ -11,11 +10,6 @@ server.use(
 );
 server.use(bodyParser.json());
 console.log(`Your SERVER: ${process.env.NODE_ENV}`);
-// TEST DB connection
-// db.sequelize
-//   .authenticate()
-//   .then(() => console.log('DB connected'))
-//   .catch((err) => console.log('Error: ', err));
 
 server.get('/', (req, res) => {
   res.send('Routing works');
@@ -23,6 +17,7 @@ server.get('/', (req, res) => {
 
 server.use('/users', require('./routes/users'));
 server.use('/posts', require('./routes/posts'));
+server.use('/comments', require('./routes/comments'));
 
 switch (process.env.NODE_ENV) {
   case 'test':
