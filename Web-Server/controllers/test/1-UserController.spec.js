@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 let authTokenUser = '';
 let authTokenAdmin = '';
 
-let username = 'onepiece';
+let username = 'jessy';
 let email = 'onepiece@ax.com';
 let password = '1234';
 
@@ -23,7 +23,7 @@ describe('User controller', () => {
       .send({
         firstName: 'Simeon',
         lastName: 'Busari',
-        username: username,
+        username: 'burundi',
         email: email,
         password: password,
         content: 'Software Developer',
@@ -43,7 +43,7 @@ describe('User controller', () => {
       .send({
         firstName: 'Johny',
         lastName: 'Dep',
-        username: username,
+        username: 'burundi',
         email: email,
         password: password,
       })
@@ -125,7 +125,7 @@ describe('User controller', () => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an.instanceof(Object);
         expect(res.body.username).to.equal(username);
-        expect(res.body.email).to.equal(email);
+        expect(res.body.email).to.equal('jessy@example.com');
         done();
       });
   });
@@ -158,14 +158,14 @@ describe('User controller', () => {
   it('should FOLLOW another user that exists in the DB and return status code 201.', (done) => {
     chai
       .request(server)
-      .post('/users/2/follow')
+      .post('/users/1/follow')
       .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(201);
         expect(res.body.followed_user)
           .to.be.an.instanceof(Object)
           .and.to.have.property('username');
-        expect(res.body.followed_user.username).to.equal('jessy');
+        expect(res.body.followed_user.username).to.equal('moonellator');
         done();
       });
   });
@@ -173,7 +173,7 @@ describe('User controller', () => {
   it('should FAIL to FOLLOW the same user twice and return status code 404.', (done) => {
     chai
       .request(server)
-      .post('/users/2/follow')
+      .post('/users/1/follow')
       .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(404);
@@ -184,14 +184,14 @@ describe('User controller', () => {
   it('should UNFOLLOW user that is already marked as followed inside the Relationships table. Expecting status code 200.', (done) => {
     chai
       .request(server)
-      .post('/users/2/unfollow')
+      .post('/users/1/unfollow')
       .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.unfollowed_user)
           .to.be.an.instanceof(Object)
           .and.to.have.property('username');
-        expect(res.body.unfollowed_user.username).to.equal('jessy');
+        expect(res.body.unfollowed_user.username).to.equal('moonellator');
         done();
       });
   });
@@ -199,7 +199,7 @@ describe('User controller', () => {
   it('should NOT be able to UNFOLLOW user that is not being followed currently', (done) => {
     chai
       .request(server)
-      .post('/users/2/unfollow')
+      .post('/users/1/unfollow')
       .set('Authorization', `Bearer ${authTokenUser}`)
       .end((err, res) => {
         expect(res).to.have.status(404);

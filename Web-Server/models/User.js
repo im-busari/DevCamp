@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         onDelete: 'cascade',
       });
+      User.hasMany(models.Comment, {
+        foreignKey: 'userId',
+        onDelete: 'cascade',
+      });
 
       User.belongsToMany(User, {
         as: 'following',

@@ -19,6 +19,34 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          userId: 2,
+          title: 'Cooking is my passion',
+          content: "Let's talk about food",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: 2,
+          title: 'Second User is quite active',
+          content: 'Random random water...',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: 3,
+          title: "Let's talk about sarmi",
+          content: 'Grandma is best!',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: 1,
+          title: 'Pineapple, pear, apple...',
+          content: 'Are you a vegetarian or what...',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       { validate: true, individualHooks: true }
     );

@@ -1,5 +1,4 @@
-const { Post, User, Role } = require('../models/index');
-const { Op } = require('sequelize');
+const { Post, User, Comment } = require('../models/index');
 
 class PostController {
   //  Get All posts
@@ -83,6 +82,7 @@ class PostController {
       });
       const user = await User.findOne({ where: { id: userId } });
 
+      console.log(post);
       if (user.roleId === 1 || post.userId === userId) {
         await post.destroy();
 
@@ -96,6 +96,22 @@ class PostController {
       }
     } catch (err) {
       res.status(500).send(err);
+    }
+  }
+
+  //  Get a collection of comments for a post
+  async getPostComments(req, res) {
+    try {
+      const post = await Post.findByPk(req.params.postId);
+
+      if (post) {
+        const comments = await post.getComments();
+        res.status(200).send(comments);
+      } else {
+        res.status(404).send('Post does not exists.');
+      }
+    } catch (err) {
+      res.status(500).send('Something went wrong. ', err);
     }
   }
 }

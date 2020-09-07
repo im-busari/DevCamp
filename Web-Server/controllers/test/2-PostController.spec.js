@@ -51,6 +51,27 @@ describe('Post controller', () => {
       });
   });
 
+  it('should GET an array of comments for the specified Post. Expecting res.status = 200', (done) => {
+    chai
+      .request(server)
+      .get('/posts/1/comments')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        done();
+      });
+  });
+
+  it(`should FAIL to GET comments for the specified Post since it doesn't exist. Expecting res.status = 200`, (done) => {
+    chai
+      .request(server)
+      .get('/posts/500/comments')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        done();
+      });
+  });
+
   it('should create new post since the user is Auth, expecting res.status 201', (done) => {
     chai
       .request(server)
@@ -152,7 +173,7 @@ describe('Post controller', () => {
   });
 
   // Tests for DELETE post
-  it('should DELETE post since it belongs to the user. Expected res.status = 200', (done) => {
+  it('should DELETE post and associated comments since it belongs to the user. Expected res.status = 200', (done) => {
     chai
       .request(server)
       .delete('/posts/3')
@@ -163,7 +184,7 @@ describe('Post controller', () => {
       });
   });
 
-  it('should DELETE post since user is Admin. Expected res.status = 200', (done) => {
+  it('should DELETE post and associated comments since user is Admin. Expected res.status = 200', (done) => {
     chai
       .request(server)
       .delete('/posts/2')

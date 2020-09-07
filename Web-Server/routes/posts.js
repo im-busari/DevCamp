@@ -10,4 +10,6 @@ router.get('/:postId', PostController.getPostById);
 router.patch('/:postId', isAuth, PostController.updatePost);
 router.delete('/:postId', isAuth, PostController.deletePost);
 
+router.get('/:postId/comments', PostController.getPostComments);
+
 module.exports = router;
