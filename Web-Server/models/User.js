@@ -116,7 +116,7 @@ module.exports = (sequelize, DataTypes) => {
         get() {
           return `${this.firstName} ${this.lastName}`;
         },
-        set(value) {
+        set() {
           throw new Error('Do not try to set the `fullName` value!');
         },
       },

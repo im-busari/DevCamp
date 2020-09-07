@@ -1,8 +1,12 @@
 const express = require('express');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 4000;
 
 const server = express();
+server.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms')
+);
 server.use(
   bodyParser.urlencoded({
     extended: true,
@@ -34,3 +38,12 @@ switch (process.env.NODE_ENV) {
     });
     break;
 }
+
+const startGracefulShutdown = () => {
+  console.log('Starting to shutdown...');
+  server.close(() => {
+    console.log('Http server closed.');
+  });
+};
+process.on('SIGTERM', startGracefulShutdown);
+process.on('SIGINT', startGracefulShutdown);

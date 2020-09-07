@@ -4,4 +4,4 @@
 
 /config
 
-.env
+config/.env

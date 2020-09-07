@@ -44,7 +44,7 @@ class PostController {
     }
   }
 
-  //  Delete post only if it belongs to User
+  //  Update post only if it belongs to User
   async updatePost(req, res) {
     try {
       const userId = req.user.user.id;
