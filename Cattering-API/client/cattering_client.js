@@ -3,7 +3,6 @@ let config = require('./config.json');
 let argv = require('minimist')(process.argv.slice(2));
 const CatApi = require('./CatApi');
 let myArgs = process.argv.slice(2);
-console.log(argv);
 
 const api = new CatApi({
   api_url: config.api_url,
@@ -40,10 +39,10 @@ switch (myArgs[0]) {
         .createCat({ cat: argv['cat'] })
         .then((res) => {
           //  console.log(res.headers.get('key'));
-          if (res.status === 200) {
+          if (res.status === 201) {
             updateConfigFile(argv['cat'], res.headers.get('key'));
           } else {
-            throw new Error('An error occurred..');
+            console.log("Cat already exists.")
           }
         })
         .catch((err) => {
@@ -103,10 +102,11 @@ switch (myArgs[0]) {
       api
         .deleteMeow({ id: argv['meowid'] }, config.cat, config.key)
         .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          console.table(data);
+          if (res.status === 200) {
+            console.log("Meow deleted successfully.")
+          } else {
+            console.log("You don't have a meow with the given ID.")
+          }
         })
         .catch((err) => {
           console.error(err);
