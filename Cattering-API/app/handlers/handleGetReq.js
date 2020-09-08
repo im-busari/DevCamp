@@ -7,20 +7,28 @@ module.exports.get = (req, res) => {
   const id = parseInt(pathname.split('/')[2]); // get ID
   const cat = pathname.split('/')[2];
   const key = pathname.split('/')[3];
+  let result;
 
   res.setHeader('Content-Type', 'application/json;charset=utf-8');
   switch (pathname) {
     case `/cats`:
       return res.end(JSON.stringify(Cats.getCats()));
+
     case `/cats/${id}`:
-      return res.end(JSON.stringify(Cats.getCats(id)));
-    case `/meows`:
-      return res.end(JSON.stringify(Meows.getMeows()));
-    case `/meows/${id}`:
-      const result = Meows.getMeows(id);
+      result = Cats.getCats(id)
       if (result === 404) {
         res.statusCode = 404;
         return res.end(JSON.stringify("We can't find the MeoW MeoW..."));
+      } else {
+        return res.end(JSON.stringify(result));
+      }
+    case `/meows`:
+      return res.end(JSON.stringify(Meows.getMeows()));
+    case `/meows/${id}`:
+      result = Meows.getMeows(id);
+      if (result === 404) {
+        res.statusCode = 404;
+        return res.end(JSON.stringify({ message: 'We can\'t find the MeoW MeoW...' }));
       } else {
         return res.end(JSON.stringify(result));
       }

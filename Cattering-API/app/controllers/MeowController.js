@@ -92,9 +92,8 @@ const deleteMeow = (id, cat, key) => {
         meows = JSON.stringify(meows);
         fs.writeFile('meows.json', meows, (err) => {
           if (err) throw err;
-          return 204;
         });
-        break;
+        return 200;
       } else if (i + 1 === meows.length) {
         return 403;
       }

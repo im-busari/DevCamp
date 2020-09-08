@@ -9,7 +9,7 @@ const getCats = (id) => {
         return cats[i];
       }
     }
-    return "We can't find this cat...";
+    return 404;
   } else {
     return cats;
   }

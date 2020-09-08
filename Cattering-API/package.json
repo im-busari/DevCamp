@@ -16,8 +16,8 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "dev": "nodemon ./app/server.js",
-    "test": "mocha ./app/test --exit"
+    "dev": "set NODE_ENV=development&& nodemon ./app/server.js",
+    "test": "set NODE_ENV=test&& mocha ./app/test --exit"
   },
   "author": "Immanuella Busari",
   "license": "ISC"

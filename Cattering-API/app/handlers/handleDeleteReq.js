@@ -13,15 +13,18 @@ module.exports.delete = (req, res) => {
       const result = Meow.deleteMeow(id, cat, key);
 
       switch (result) {
+        case 200:
+          res.statusCode = 200;
+          res.end(
+            JSON.stringify('Couldnt find meow...')
+          );
+          break;
         case 403:
           res.statusCode = 403;
           res.end(
             JSON.stringify('Couldnt find meow...')
           );
           break;
-        case 204:
-          res.statusCode = 204;
-          res.end(JSON.stringify('Meow deleted successfully'));
       }
       break;
     default:

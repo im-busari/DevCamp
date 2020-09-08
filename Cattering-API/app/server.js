@@ -1,6 +1,6 @@
 const http = require('http');
 const url = require('url');
-const port = 8080;
+const PORT = 8080;
 
 //  Request Handlers
 const handleGetReq = require('./handlers/handleGetReq');
@@ -22,9 +22,19 @@ const server = http.createServer((req, res) => {
 });
 
 
-// server.listen(port, () => {
-//   console.log(`Server listening on port http://localhost:${port}/`);
-// })
-
-module.exports= server;
+switch (process.env.NODE_ENV) {
+  case 'test':
+    module.exports = server;
+    break;
+  case 'development':
+    server.listen(PORT, () => {
+      console.log(`Server started on http://localhost:${PORT}`);
+    });
+    break;
+  default:
+    server.listen(PORT, () => {
+      console.log(`Server started on http://localhost:${PORT}`);
+    });
+    break;
+}
 
