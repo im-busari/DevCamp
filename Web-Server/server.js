@@ -3,6 +3,27 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 4000;
 
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+//  Generate API documentation
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'DevNetwork API',
+      description: 'Simple api',
+      contact: {
+        name: 'Immanuella Busari',
+      },
+      servers: ['http://localhost:4000'],
+    },
+  },
+  //  ['./routes/*.js]
+  apis: ['./routes/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 const server = express();
 server.use(
   morgan(':method :url :status :res[content-length] - :response-time ms')
@@ -19,6 +40,8 @@ server.get('/', (req, res) => {
   res.send('Routing works');
 });
 
+//  Routes
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 server.use('/users', require('./routes/users'));
 server.use('/posts', require('./routes/posts'));
 server.use('/comments', require('./routes/comments'));
@@ -38,7 +61,7 @@ switch (process.env.NODE_ENV) {
     });
     break;
 }
-
+//  Graceful shutdown
 const startGracefulShutdown = () => {
   console.log('Starting to shutdown...');
   server.close(() => {

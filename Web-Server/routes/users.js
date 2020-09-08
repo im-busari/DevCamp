@@ -4,8 +4,19 @@ const isAuth = require('../middlewares/isAuth');
 
 const UserController = require('../controllers/UserController');
 
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *    description: Get all users from the DB
+ *    responses:
+ *      '200':
+ *        description: A successfull response.
+ */
 router.get('/', UserController.getAllUsers);
+
 router.post('/signup', UserController.signup);
+
 router.post('/signin', UserController.signin);
 
 router.get('/me', isAuth, UserController.getSelf);
