@@ -81,7 +81,6 @@ class PostController {
       });
       const user = await User.findOne({ where: { id: userId } });
 
-      console.log(post);
       if (post && (user.roleId === 1 || post.userId === userId)) {
         await post.destroy();
 

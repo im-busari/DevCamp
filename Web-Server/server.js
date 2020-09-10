@@ -1,32 +1,21 @@
+const rfs = require('rotating-file-stream');
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 4000;
-
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-
-//  Generate API documentation
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: 'DevNetwork API',
-      description: 'Simple api',
-      contact: {
-        name: 'Immanuella Busari',
-      },
-      servers: ['http://localhost:4000'],
-    },
-  },
-  //  ['./routes/*.js]
-  apis: ['./routes/*.js'],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 const server = express();
+
+//  Logging requests
+let accessLogStream = rfs.createStream('access.log', {
+  interval: '1d', // rotate daily
+  path: path.join(__dirname, 'log'),
+});
+
 server.use(
-  morgan(':method :url :status :res[content-length] - :response-time ms')
+  morgan('combined', {
+    stream: accessLogStream,
+  })
 );
 server.use(
   bodyParser.urlencoded({
@@ -41,7 +30,6 @@ server.get('/', (req, res) => {
 });
 
 //  Routes
-server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 server.use('/users', require('./routes/users'));
 server.use('/posts', require('./routes/posts'));
 server.use('/comments', require('./routes/comments'));

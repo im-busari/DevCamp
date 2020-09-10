@@ -133,7 +133,6 @@ describe('Post controller', () => {
         title: 'I have the authority to do whatever I want',
       })
       .end((err, res) => {
-        console.log(localAdminToken);
         expect(res).to.have.status(404);
         done();
       });

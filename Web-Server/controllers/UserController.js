@@ -92,6 +92,22 @@ class UserController {
     }
   }
 
+  //  Check if username exists
+  async checkUsername(req, res) {
+    try {
+      const user = await User.findOne({
+        where: { username: req.params.username },
+      });
+      if (user instanceof User) {
+        res.status(200).send(user);
+      } else {
+        res.status(404).send('This user does not exist in our DB.');
+      }
+    } catch (err) {
+      res.status(500).send('Something is wrong: ', err);
+    }
+  }
+
   //  Follow another user
   async followUser(req, res) {
     try {
