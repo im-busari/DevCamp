@@ -29,86 +29,67 @@ class UserController {
   }
 
   //  Register
-  signup(req, res) {
-    User.create(
-      {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password, // Hashing set function inside the module
-        UserBio: req.body,
-      },
-      {
-        include: [{ association: User.UserBio }],
-      }
-    )
-      .then((user) => {
+  async signup(req, res) {
+    try {
+      const user = await User.create(
+        {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password, // Hashing set function inside the module
+          UserBio: req.body,
+        },
+        {
+          include: [{ association: User.UserBio }],
+        }
+      );
+      if (user) {
         res.status(201).send(user.toJSON());
-      })
-      .catch((err) => {
-        res.status(403).json(err.errors[0].message);
-      });
+      }
+    } catch (err) {
+      res.status(403).json(err.errors[0].message);
+    }
   }
 
   //  Login and receive an Auth Token (JWT)
-  signin(req, res) {
-    User.findOne({ where: { username: req.body.username } })
-      .then((user) => {
-        if (
-          req.body.password &&
-          bcrypt.compareSync(req.body.password, user.password)
-        ) {
-          //  TODO: Move JWT to .env
-          const token = jwt.sign({ user }, 'slay$n', {
-            expiresIn: '24h',
-          });
-          //  Return user's JWT special token
-          res.status(200).json({ token });
-        } else {
-          res.status(403).send('Wrong login credentials.');
-        }
-      })
-      .catch((err) => {
-        res.status(403).json(`Something went wrong:\n${err}`);
+  async signin(req, res) {
+    try {
+      const user = await User.findOne({
+        where: { username: req.body.username },
       });
+      if (
+        req.body.password &&
+        bcrypt.compareSync(req.body.password, user.password)
+      ) {
+        const token = jwt.sign({ user }, 'slay$n', {
+          expiresIn: '24h',
+        });
+        res.status(200).json({ token });
+      } else {
+        res.status(403).send('Wrong login credentials.');
+      }
+    } catch (err) {
+      res.status(403).json(`Something went wrong:\n${err}`);
+    }
   }
 
   //  Updates the currently logged in user
-  updateSelf(req, res) {
-    const { username, bioId } = req.user.user;
-    User.update(req.body, {
-      where: {
-        username: username,
-      },
-    })
-      .then(() => {
-        UserBio.update(req.body, {
-          where: {
-            id: bioId,
-          },
-        });
-        res.status(200).send('Your account was updated accordingly.');
-      })
-      .catch((err) => {
-        res.status(400).send(`Failed to update the resource: ${err}`);
+  async updateSelf(req, res) {
+    try {
+      const { username, bioId } = req.user.user;
+      await User.update(req.body, {
+        where: {
+          username: username,
+        },
       });
-  }
-
-  //  Check if username exists
-  //  TODO: Integration tests
-  checkUsername(req, res) {
-    User.findOne({ where: { username: req.params.username } })
-      .then((user) => {
-        if (user instanceof User) {
-          res.status(200).send(user);
-        } else {
-          res.status(404).send('This user does not exist in our DB.');
-        }
-      })
-      .catch((err) => {
-        res.status(500).send('Something is wrong: ', err);
+      await UserBio.update(req.body, {
+        where: { id: bioId },
       });
+      res.status(200).send('Your account was updated accordingly.');
+    } catch (err) {
+      res.status(400).send(`Failed to update the resource: ${err}`);
+    }
   }
 
   //  Follow another user
