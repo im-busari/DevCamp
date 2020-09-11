@@ -1,13 +1,31 @@
+const formidable = require('formidable');
 const express = require('express');
-const server = express();
 const fs = require('fs');
-const formidable = require('formidable')
+const config = require('./config');
+const server = express();
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({
-    accessKeyId: process.env.accessKeyId,
-    secretAccessKey: process.env.secretAccessKey
+    accessKeyId: config.accessKeyId,
+    secretAccessKey: config.secretAccessKey
 });
+
+const uploadToS3 = (fileStream, fileName) => {
+    // Setting up S3 upload parameters
+    const params = {
+        Bucket: config.s3bucket,
+        Key: fileName, // File name you want to save as in S3
+        Body: fileStream
+    };
+
+    // Uploading files to the bucket
+    s3.upload(params, function(err, data) {
+        if (err) {
+            throw err;
+        }
+        console.log(`File uploaded successfully. ${data.Location}`);
+    });
+}
 
 server.post('/upload', (req, res) => {
     const form = formidable({ multiples: true });
@@ -19,32 +37,18 @@ server.post('/upload', (req, res) => {
         }
 
         let file = files.fileName;
-        let fileName = files.fileName.name;
 
-        console.log('Uploading file...');
-        // Read content from the file
-        //  const fileContent = fs.readFileSync(fileName);
+        let fileName = file.name;
         let fileStream = fs.createReadStream(file.path)
-            .on('error', function(err) {
+            .on('error', function (err) {
                 console.log('File Error', err);
             });
 
-        // Setting up S3 upload parameters
-        const params = {
-            Bucket: 'immanuella-busari-devcamp-mm',
-            Key: fileName, // File name you want to save as in S3
-            Body: fileStream
-        };
+        uploadToS3(fileStream, fileName);
 
-        // Uploading files to the bucket
-        s3.upload(params, function(err, data) {
-            if (err) {
-                throw err;
-            }
-            console.log(`File uploaded successfully. ${data.Location}`);
-            res.json({ fields, files });
-        });
-    });
+        console.log('Uploading file...');
+        res.json({ fields, files });
+    })
 });
 
 
