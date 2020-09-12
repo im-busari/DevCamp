@@ -18,12 +18,21 @@ const uploadToS3 = (fileStream, fileName) => {
         Body: fileStream
     };
 
+    const options = { partSize: 5 * 1024 * 1024, queueSize: 10 };
+
     // Uploading files to the bucket
-    s3.upload(params, function(err, data) {
+    s3.upload(params, options, function(err, data) {
         if (err) {
             throw err;
         }
-        console.log(`File uploaded successfully. ${data.Location}`);
+
+        let url = s3.getSignedUrl('getObject', {
+            Bucket: config.s3bucket,
+            Key: fileName,
+            Expires: 900  // 15 min
+        });
+
+        console.log('Quickly, you have 15 min: ', url);
     });
 }
 
