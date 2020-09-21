@@ -1,0 +1,16 @@
+{
+  "name": "md02-1115-aws",
+  "version": "1.0.0",
+  "description": "I. Here is a list of some popular AWS services. Do a quick research and explain shortly what each of them is for and why we would like to use them.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node s3_listbucket.js"
+  },
+  "author": "Immanuella B",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.750.0",
+    "dotenv": "^8.2.0"
+  }
+}
